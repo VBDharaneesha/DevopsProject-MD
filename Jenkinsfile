@@ -6,6 +6,8 @@ pipeline {
     }
     environment {
         IMAGE_NAME = "VBDharaneesha/DevopsProject-MD:${GIT_COMMIT}"
+        // This safely assigns the Java path at the pipeline level
+        JAVA_HOME = "${tool 'java-17'}"
     }
     stages {
         stage('git-checkout') {
@@ -15,13 +17,7 @@ pipeline {
         }
         stage('compile') {
             steps {
-                /* 
-                   We explicitly bind the paths inside the shell block using the tool homes 
-                   that Jenkins configures automatically out of your tools block.
-                */
                 sh '''
-                    export JAVA_HOME="${tool 'java-17'}"
-                    export PATH="${tool 'maven'}/bin:$JAVA_HOME/bin:$PATH"
                     mvn compile
                 '''
             }
@@ -29,8 +25,6 @@ pipeline {
         stage('packaging') {
             steps {
                 sh '''
-                    export JAVA_HOME="${tool 'java-17'}"
-                    export PATH="${tool 'maven'}/bin:$JAVA_HOME/bin:$PATH"
                     mvn clean package
                 '''
             }
