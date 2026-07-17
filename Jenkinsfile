@@ -39,10 +39,11 @@ pipeline{
                 sh '''
                     docker run -it -d --name DevopsProject-MD-demo -p 8081:8080 ${IMAGE_NAME}
                 '''
-                
+
             }
         }
-            
+
     }
-    
+
 }
+
