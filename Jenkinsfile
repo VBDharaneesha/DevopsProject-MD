@@ -5,7 +5,7 @@ pipeline{
         maven 'maven'
     }
     environment{
-        IMAGE_NAME = VBDharaneesha/DevopsProject-MD:${GIT_COMMIT}
+        IMAGE_NAME = "VBDharaneesha/DevopsProject-MD:${GIT_COMMIT}"
     }
     stages{
         stage('git-checkout'){
@@ -39,11 +39,7 @@ pipeline{
                 sh '''
                     docker run -it -d --name DevopsProject-MD-demo -p 8081:8080 ${IMAGE_NAME}
                 '''
-
             }
         }
-
     }
-
 }
-
