@@ -53,10 +53,11 @@ pipeline {
             steps {
                 sh '''
                     docker rm -f DevopsProject-MD-demo || true
+
                     docker run -d \
-                      --name DevopsProject-MD-demo \
-                      -p 8081:8080 \
-                      ${IMAGE_NAME}
+                        --name DevopsProject-MD-demo \
+                        -p 8081:8080 \
+                        ${IMAGE_NAME}
                 '''
             }
         }
