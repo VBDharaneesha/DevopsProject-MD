@@ -1,45 +1,62 @@
 pipeline {
     agent any
+
     tools {
         jdk 'java-17'
         maven 'maven'
     }
+
     environment {
-        IMAGE_NAME = "VBDharaneesha/DevopsProject-MD:${GIT_COMMIT}"
-        // This safely assigns the Java path at the pipeline level
-        JAVA_HOME = "${tool 'java-17'}"
+        IMAGE_NAME = "VBDharaneesha/devopsproject-md:${BUILD_NUMBER}"
     }
+
     stages {
-        stage('git-checkout') {
+
+        stage('Checkout') {
             steps {
-                git url: 'https://github.com/VBDharaneesha/DevopsProject-MD.git', branch: 'test'
+                git branch: 'test',
+                    url: 'https://github.com/VBDharaneesha/DevopsProject-MD.git'
             }
         }
-        stage('compile') {
+
+        stage('Verify Tools') {
             steps {
                 sh '''
-                    mvn compile
+                    echo "JAVA_HOME=$JAVA_HOME"
+                    java -version
+                    mvn -version
                 '''
             }
         }
-        stage('packaging') {
+
+        stage('Compile') {
             steps {
-                sh '''
-                    mvn clean package
-                '''
+                sh 'mvn compile'
             }
         }
-        stage('docker build') {
+
+        stage('Package') {
+            steps {
+                sh 'mvn clean package -DskipTests'
+            }
+        }
+
+        stage('Docker Build') {
             steps {
                 sh '''
                     docker build -t ${IMAGE_NAME} .
                 '''
             }
         }
-        stage('Docker-testing') {
+
+        stage('Docker Run') {
             steps {
                 sh '''
-                    docker run -it -d --name DevopsProject-MD-demo -p 8081:8080 ${IMAGE_NAME}
+                    docker rm -f DevopsProject-MD-demo || true
+                    docker run -d \
+                      --name DevopsProject-MD-demo \
+                      -p 8081:8080 \
+                      ${IMAGE_NAME}
                 '''
             }
         }
