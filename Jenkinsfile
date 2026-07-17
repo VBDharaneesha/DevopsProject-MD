@@ -6,6 +6,7 @@ pipeline{
     }
     environment{
         IMAGE_NAME = "VBDharaneesha/DevopsProject-MD:${GIT_COMMIT}"
+	JAVA_HOME = "/usr/lib/jvm/java-17-openjdk-amd64"
     }
     stages{
         stage('git-checkout'){
