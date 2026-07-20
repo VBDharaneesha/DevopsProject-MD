@@ -44,8 +44,8 @@ pipeline {
         stage('Docker Build') {
             steps {
                 sh '''
-                   	 printenv
-			 docker build -t ${IMAGE_NAME} .
+                     printenv
+                     docker build -t ${IMAGE_NAME} .
                 '''
             }
         }
@@ -60,6 +60,22 @@ pipeline {
                         -p 9000:8080 \
                         ${IMAGE_NAME}
                 '''
+            }
+        }
+
+        stage('Docker Hub Login') {
+            environment {
+                DOCKER_CREDS = credentials('docker-hub-creds')
+            }
+            steps {
+                // Using stage-level environment credentials handles masking and keeps the shell call secure
+                sh 'echo "$DOCKER_CREDS_PSW" | docker login -u "$DOCKER_CREDS_USR" --password-stdin'
+            }
+        }
+
+        stage('Docker Hub Push') {
+            steps {
+                sh 'docker push ${IMAGE_NAME}'
             }
         }
     }
