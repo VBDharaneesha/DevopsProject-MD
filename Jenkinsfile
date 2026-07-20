@@ -63,19 +63,12 @@ pipeline {
             }
         }
 
-        stage('Docker Hub Login') {
-            environment {
-                DOCKER_CREDS = credentials('docker-hub-creds')
-            }
+        stage('Docker Push to Hub') {
             steps {
-                // Using stage-level environment credentials handles masking and keeps the shell call secure
-                sh 'echo "$DOCKER_CREDS_PSW" | docker login -u "$DOCKER_CREDS_USR" --password-stdin'
-            }
-        }
-
-        stage('Docker Hub Push') {
-            steps {
-                sh 'docker push ${IMAGE_NAME}'
+                withCredentials([usernamePassword(credentialsId: 'docker-hub-creds', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                    sh 'echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin'
+                    sh 'docker push ${IMAGE_NAME}'
+                }
             }
         }
     }
