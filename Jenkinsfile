@@ -7,7 +7,7 @@ pipeline {
     }
 
     environment {
-        IMAGE_NAME = "VBDharaneesha/devopsproject-md:${BUILD_NUMBER}"
+        IMAGE_NAME = "goku24/devopsproject-md:${BUILD_NUMBER}"
     }
 
     stages {
