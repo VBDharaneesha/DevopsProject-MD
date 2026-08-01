@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'worker-node' }
+    agent { label 'aws-ubuntu-node' }
 
     tools {
         jdk 'java-17'
