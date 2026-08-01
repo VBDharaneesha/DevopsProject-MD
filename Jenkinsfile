@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'worker-node' }
+    agent { label 'worker-nod' }
 
     tools {
         jdk 'java-17'
