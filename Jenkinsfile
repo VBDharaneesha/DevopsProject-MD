@@ -1,4 +1,4 @@
-pipeline {
+ipeline {
     agent { label 'worker-node' }
 
     tools {
